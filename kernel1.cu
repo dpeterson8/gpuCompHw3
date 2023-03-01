@@ -22,7 +22,8 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
     int y = iy + 1;
     int idx = y * floatpitch + x;
 
-    if( y >= width - 1|| x >= width - 1 || y < 1 || x < 1 ) return;
+    if( y >= width - 1 || x >= width - 1|| y < 1 || x < 1 ) return;
+
 
     s_data[threadIdx.x + 1] = g_dataA[idx - floatpitch];
     s_data[threadIdx.x + 1 + s_rowwidth] = g_dataA[idx];
@@ -34,7 +35,9 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
         s_data[s_rowwidth] = g_dataA[idx - 1];
         s_data[s_rowwidth * 2] = g_dataA[idx + floatpitch - 1];
 
-    } else if (threadIdx.x == blockDim.x - 1 || x + 2 == width) {
+    }
+    
+    if (threadIdx.x == blockDim.x - 1 || x + 2 == width) {
         s_data[threadIdx.x + 2] = g_dataA[idx - floatpitch + 1];
         s_data[s_rowwidth + threadIdx.x + 2] = g_dataA[idx + 1];
         s_data[s_rowwidth * 2 + threadIdx.x + 2] = g_dataA[idx + floatpitch + 1];
@@ -44,7 +47,6 @@ __global__ void k1( float* g_dataA, float* g_dataB, int floatpitch, int width)
 
     __syncthreads();
     
-
     int threadId = threadIdx.x + 1;
 
 
