@@ -9,7 +9,7 @@
 #include "kernel.h"
 #include "kernel1.h"
 
-int device = 1;
+int device = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 // declaration, forward
@@ -160,9 +160,9 @@ void runCUDA( float *h_dataA, float* h_dataB, int width, int height, int passes,
    float * temp;
    for(int r=0; r<passes; r++){ 
       //execute the kernel
-      // k1 <<< grid, threads, shared_mem_size >>>( d_dataA, d_dataB, pitch/sizeof(float), width);
+      k1 <<< grid, threads, shared_mem_size >>>( d_dataA, d_dataB, pitch/sizeof(float), width);
                 
-      k0 <<< grid, threads >>>( d_dataA, d_dataB, pitch/sizeof(float), width);
+      // k0 <<< grid, threads >>>( d_dataA, d_dataB, pitch/sizeof(float), width);
       // swap the device data pointers  
       temp    = d_dataA;
       d_dataA = d_dataB;
